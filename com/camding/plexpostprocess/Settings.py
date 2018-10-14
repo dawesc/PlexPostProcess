@@ -6,7 +6,7 @@ class Settings:
   @staticmethod
   def GetRootPath():
     #plexpostprocess
-    configDir = os.path.dirname(os.path.realpath(__file__))
+    configDir = os.path.abspath(os.path.dirname(os.path.realpath(__file__)))
     #camding
     configDir = os.path.join(configDir, os.pardir) 
     #com
