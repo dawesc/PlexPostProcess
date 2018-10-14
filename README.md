@@ -99,3 +99,17 @@ user=root
 password=Password!
 db=scan_and_transcode
 </pre>
+
+# Installation of Database
+
+The application uses a MySQL database first create it
+
+<pre>
+CREATE DATABASE scan_and_transcode;
+</pre>
+
+then restore the database
+
+<pre>
+mysql -u root -p scan_and_transcode < sat_install.sql
+</pre>
