@@ -114,8 +114,8 @@ password=Password!
 db=plex_post_process
 
 [FileScanner]
-/mnt/PlexRecordings/Movies
-/mnt/PlexRecordings/TV
+dir1=/mnt/PlexRecordings/Movies
+dir2=/mnt/PlexRecordings/TV
 </pre>
 
 # Installation of Database

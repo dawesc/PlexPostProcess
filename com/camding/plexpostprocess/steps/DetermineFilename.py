@@ -12,6 +12,7 @@ class DetermineFilename(object):
     self.__plexPostProcess = plexPostProcess
     self.__london = pytz.timezone('Europe/London') #This is where corrie is aired
     self.__ltz    = get_localzone()                #The servers timezone
+    self.__tmpDir = Settings.GetConfig('Paths', 'backup', '/mnt/PlexRecordings/BackupMP2')
   
   def GetPlexPostProcess(self):
     return self.__plexPostProcess;

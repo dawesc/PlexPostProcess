@@ -4,7 +4,7 @@ class Settings:
   """Used to read in the settings"""
 
   @staticmethod
-  def GetRootPath(cls):
+  def GetRootPath():
     #plexpostprocess
     configDir = os.path.dirname(os.path.realpath(__file__))
     #camding
@@ -14,6 +14,7 @@ class Settings:
     #PlexPostProcess Root
     configDir = os.path.join(configDir, os.pardir)
     configDir = os.path.abspath(configDir)
+    return configDir
     
   @classmethod
   def __ClsInit(cls):
@@ -28,10 +29,12 @@ class Settings:
     cls.__config = configparser.ConfigParser() 
     cls.__config.read(cls.__configFilename)
     
+    return cls.__config
+    
   @classmethod
   def GetConfig(cls, section = None, key = None, defaultVal = None):
     config = Settings.__ClsInit()
-    if section is not None:
+    if section is None:
       return config
     sectionObject = dict()
     if section in config:

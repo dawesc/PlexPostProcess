@@ -22,13 +22,12 @@ class DatabaseInteraction(object):
     return self
     
   def Reconnect(self):
-    dbConfig = Settings.GetConfig('Database')
-    self.__connection = pymysql.connect(host=dbConfig['host'],
-                             user=dbConfig['user'],
-                             password=dbConfig['password'],
-                             db=dbConfig['db'],
-                             unix_socket='/tmp/mysql.sock',
-                             charset='utf8mb4',
+    self.__connection = pymysql.connect(host=Settings.GetConfig('Database','host','localhost'),
+                             user=Settings.GetConfig('Database','user','root'),
+                             password=Settings.GetConfig('Database','password','password'),
+                             db=Settings.GetConfig('Database','db','plex_post_process'),
+                             unix_socket=Settings.GetConfig('Database','unix_socket','/tmp/mysql.sock'),
+                             charset=Settings.GetConfig('Database','charset','utf8mb4'),
                              cursorclass=pymysql.cursors.DictCursor)
                              
   def VerifyTables(self):

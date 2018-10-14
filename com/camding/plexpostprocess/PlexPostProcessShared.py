@@ -29,8 +29,9 @@ from argparse import RawDescriptionHelpFormatter
 
 from com.camding.plexpostprocess.DatabaseInteraction import DatabaseInteraction
 from com.camding.plexpostprocess.FileScanner import FileScanner
-from com.camding.plexpostprocess.PlexPostProcess import PlexPostProcess
+from com.camding.plexpostprocess.PlexPostProcessStateMachine import PlexPostProcessStateMachine
 from com.camding.plexpostprocess.Settings import Settings
+from com.camding.plexpostprocess.steps.DetermineFiletype import DetermineFiletype
 
 __all__ = []
 __version__ = 0.1
@@ -64,7 +65,7 @@ class PlexPostProcessShared():
     program_build_date = str(__updated__)
     program_version_message = '%%(prog)s %s (%s)' % (program_version, program_build_date)
     program_shortdesc = 'Scan and PlexPostProcess'
-    program_license = '''%s
+    program_license = '''%s %s
 
    MIT License
 
@@ -104,7 +105,7 @@ SOFTWARE.
       # Process arguments
       args = parser.parse_args(argv)
       print(args)
-      paths   = args.paths + list(Settings.GetConfig('FileScanner').keys())
+      paths   = args.paths + list(Settings.GetConfig('FileScanner').values())
       verbose = args.verbose > 0
       recurse = args.recurse
       inpat   = args.include
@@ -126,7 +127,7 @@ SOFTWARE.
       fileScanner = FileScanner(recurse = recurse, paths = paths, inpat = inpat, expat = expat, verbose = verbose)
       with DatabaseInteraction() as databaseInteraction:
         if args.debugCorrie:
-          x = PlexPostProcess(databaseInteraction)
+          x = PlexPostProcessStateMachine(databaseInteraction)
           print(x.GetNewCoronationStreetFilename("Coronation Street (1960) - 2018-10-12 11 30 00 - Episode 10-12.mp4", None))
           return 0
         
@@ -142,8 +143,8 @@ SOFTWARE.
             nrNewFiles = databaseInteraction.UpdateWithFiles(fileScanner)
             print("Database update complete with " + str(nrNewFiles) + " new files.")
           if nrNewFiles > 0 or first:
-            plexPostProcessr = PlexPostProcess(databaseInteraction)
-            plexPostProcessr.DetermineFiletype()
+            plexPostProcessr = PlexPostProcessStateMachine(databaseInteraction)
+            DetermineFiletype(plexPostProcessr).DetermineFiletypes()
             plexPostProcessr.PlexPostProcess()
           if nrNewFiles == 0:
             wakeUp.clear()
