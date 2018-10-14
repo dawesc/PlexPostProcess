@@ -1,26 +1,27 @@
 #!/usr/bin/env python3.6
  
-import sys, time
+import sys
 
-from com.camding.scanandtranscode.Daemon import Daemon
-from com.camding.scanandtranscode.ScanAndTranscodeShared import ScanAndTranscodeShared
+from com.camding.plexpostprocess.Daemon import Daemon
+from com.camding.plexpostprocess.PlexPostProcessShared import PlexPostProcessShared
+from com.camding.plexpostprocess.Settings import Settings
  
-class ScanAndTranscodeDaemon(Daemon):
+class PlexPostProcessDaemon(Daemon):
   def __init__(self, pidfile):
     Daemon.__init__(self, pidfile)
     self.__config = []
     if len(sys.argv) >= 3:
       configFile = sys.argv[2]
-      with open(configFile, 'r+') as file:
-        self.__config = file.read().splitlines()
-        self.__config.append('--daemon')
+      with open(configFile, 'r+') as configFileStream:
+        self.__config = configFileStream.read().splitlines()
+    self.__config.append('--daemon')
             
   def run(self):
-    ScanAndTranscodeShared().mainWithArgs(self.__config)
+    PlexPostProcessShared().mainWithArgs(self.__config)
  
 if __name__ == "__main__":
-  daemon = ScanAndTranscodeDaemon('/tmp/scan_and_transcode.pid')
-  if len(sys.argv) == 3:
+  daemon = PlexPostProcessDaemon(Settings.GetConfig('Paths','daemonLinePidFile','daemon_plex_post_process.pid'))
+  if len(sys.argv) > 1:
     if 'start' == sys.argv[1]:
       daemon.start()
     elif 'stop' == sys.argv[1]:

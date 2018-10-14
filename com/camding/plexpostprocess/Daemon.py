@@ -31,7 +31,7 @@ class Daemon:
     # Try killing the daemon process  
     try:
       os.kill(pid, 0)
-    except OSError as err:
+    except OSError as _err:
       self.status_ = DaemonState.STOPPED
       os.remove(self.pidfile)
     else:
@@ -72,8 +72,8 @@ class Daemon:
     sys.stdout.flush()
     sys.stderr.flush()
     si = open(os.devnull, 'r')
-    so = open('/tmp/search_and_transcode.out.txt', 'a+')
-    se = open('/tmp/search_and_transcode.err.txt', 'a+')
+    so = open('/tmp/plex_post_process.out.txt', 'a+')
+    se = open('/tmp/plex_post_process.err.txt', 'a+')
 
     os.dup2(si.fileno(), sys.stdin.fileno())
     os.dup2(so.fileno(), sys.stdout.fileno())

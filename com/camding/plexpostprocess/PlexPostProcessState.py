@@ -5,7 +5,8 @@ Created on 28 Oct 2017
 '''
 
 from enum import Enum
-class TranscodeState(Enum):
+
+class PlexPostProcessState(Enum):
     ERROR = 1
     SUCCESS = 2
     INITIAL = 3

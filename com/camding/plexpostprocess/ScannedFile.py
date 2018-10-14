@@ -3,7 +3,7 @@ Created on 28 Oct 2017
 
 @author: chrisd
 '''
-from com.camding.scanandtranscode.TranscodeState import TranscodeState
+from com.camding.plexpostprocess.PlexPostProcessState import PlexPostProcessState
 
 class ScannedFile(object):
   '''
@@ -26,7 +26,7 @@ class ScannedFile(object):
     return self.__filetype
     
   def GetState(self):
-    return TranscodeState[self.__state]
+    return PlexPostProcessState[self.__state]
   
   def GetId(self):
     return self.__id
@@ -41,7 +41,7 @@ class ScannedFile(object):
     return self.__creationDate
     
   def IsFinished(self):
-    stateParsed = TranscodeState[self.__state]
-    if stateParsed == TranscodeState.ERROR or stateParsed == TranscodeState.SUCCESS or stateParsed == TranscodeState.DUPLICATE_DELETED:
+    stateParsed = PlexPostProcessState[self.__state]
+    if stateParsed == PlexPostProcessState.ERROR or stateParsed == PlexPostProcessState.SUCCESS or stateParsed == PlexPostProcessState.DUPLICATE_DELETED:
       return True
     return False

@@ -4,10 +4,10 @@ Created on 28 Oct 2017
 @author: chrisd
 '''
 
-import configparser
 import pymysql.cursors
 import os.path, re, time
-from com.camding.scanandtranscode.ScannedFile import ScannedFile
+from com.camding.plexpostprocess.ScannedFile import ScannedFile
+from com.camding.plexpostprocess.Settings import Settings
 
 class DatabaseInteraction(object):
   '''
@@ -22,9 +22,7 @@ class DatabaseInteraction(object):
     return self
     
   def Reconnect(self):
-    config = configparser.ConfigParser()
-    config.read('/etc/defaults/sat.conf')
-    dbConfig = config['Database']
+    dbConfig = Settings.GetConfig('Database')
     self.__connection = pymysql.connect(host=dbConfig['host'],
                              user=dbConfig['user'],
                              password=dbConfig['password'],
@@ -156,5 +154,5 @@ AUTO_INCREMENT=1 ;'''
       cursor.execute(sql, (queuedFile.GetId(), operation, message,))
     self.__connection.commit()
     
-  def __exit__(self, exc_type, exc_value, traceback):
+  def __exit__(self, _exc_type, _exc_value, _traceback):
     self.__connection.close()

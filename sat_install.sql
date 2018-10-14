@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.7.23, for FreeBSD10.4 (amd64)
 --
--- Host: localhost    Database: scan_and_transcode
+-- Host: localhost    Database: plex_post_process
 -- ------------------------------------------------------
 -- Server version	5.7.23-log
 

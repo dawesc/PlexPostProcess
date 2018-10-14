@@ -1,3 +1,4 @@
+from com.camding.plexpostprocess.Settings import Settings
 
 class Metadata(object):
   '''
@@ -41,7 +42,7 @@ class Metadata(object):
   
   def GetIDCommand(self, tempFilename):
     return [
-      '/usr/local/bin/id3v2',
+      Settings.GetConfig("Applications", "id3v2", '/usr/local/bin/id3v2') ,
       '--TYER',
       self.GetYear(), 
       '--TALB',

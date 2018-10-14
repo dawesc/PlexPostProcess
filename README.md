@@ -1,4 +1,5 @@
-# PlexPostProcess
+# PlexPostProcess DVR
+
 Made so i can get coronation street back on track; essentially once Plex has made a recording in the DVR i want it to do a few things as a post process. It performs as follows:
 
 * Detect duplicates and delete if necessary
@@ -88,16 +89,33 @@ save-always: False
 save-forensics: True
 </pre>
 
-## Scan And Transcode
+## Plex Post Process
 
 This application has a config file in `/etc/defaults/sat.conf` that tells it currently how to access the database:
 
 <pre>
+[Paths]
+backup=/mnt/PlexRecordings/BackupMP2
+plexLibrary=/usr/local/plexdata-plexpass/Plex Media Server/Plug-in Support/Databases/com.plexapp.plugins.library.db
+cmdLinePidFile=/tmp/plex_post_process_cmd.pid
+daemonLinePidFile=/tmp/plex_post_process_daemon.pid
+
+[Applications]
+id3v2=/usr/local/bin/id3v2
+ffprobe=/usr/local/bin/ffprobe
+bash=/usr/local/bin/bash
+handbrake=/usr/local/bin/HandBrakeCLI
+ffmpeg=/usr/local/bin/ffmpeg
+
 [Database]
 host=localhost
 user=root
 password=Password!
-db=scan_and_transcode
+db=plex_post_process
+
+[FileScanner]
+/mnt/PlexRecordings/Movies
+/mnt/PlexRecordings/TV
 </pre>
 
 # Installation of Database
@@ -105,11 +123,27 @@ db=scan_and_transcode
 The application uses a MySQL database first create it
 
 <pre>
-CREATE DATABASE scan_and_transcode;
+CREATE DATABASE plex_post_process;
 </pre>
 
 then restore the database
 
 <pre>
-mysql -u root -p scan_and_transcode < sat_install.sql
+mysql -u root -p plex_post_process < sat_install.sql
+</pre>
+
+# Installation of Service
+
+To run the application on startup; add the following service definition
+
+<pre>
+#!/bin/sh
+#
+
+# PROVIDE: plex_post_process
+# REQUIRE: LOGIN FILESYSTEMS
+# BEFORE: securelevel
+# KEYWORD: shutdown
+
+"/mnt/PlexRecordings/sat/PlexPostProcess/run_daemon.sh" "$1"
 </pre>
