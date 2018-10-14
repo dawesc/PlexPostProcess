@@ -140,10 +140,10 @@ To run the application on startup; add the following service definition
 #!/bin/sh
 #
 
-# PROVIDE: plex_post_process
-# REQUIRE: LOGIN FILESYSTEMS
-# BEFORE: securelevel
-# KEYWORD: shutdown
+ # PROVIDE: plex_post_process
+ # REQUIRE: LOGIN FILESYSTEMS
+ # BEFORE: securelevel
+ # KEYWORD: shutdown
 
 "/mnt/PlexRecordings/sat/PlexPostProcess/run_daemon.sh" "$1"
 </pre>

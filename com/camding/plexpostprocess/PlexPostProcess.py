@@ -38,7 +38,7 @@ if __name__ == "__main__":
       sys.exit(0)
   sys.exit(main())
 
-pid_file = Settings.GetConfig('Paths','cmdLinePidFile','cmd_plex_post_process.pid')
+pid_file = Settings.GetConfig('Paths','cmdLinePidFile','/tmp/cmd_plex_post_process.pid')
 fp = open(pid_file, 'w')
 try:
     fcntl.lockf(fp, fcntl.LOCK_EX | fcntl.LOCK_NB)

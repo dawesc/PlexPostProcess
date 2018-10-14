@@ -20,7 +20,7 @@ class PlexPostProcessDaemon(Daemon):
     PlexPostProcessShared().mainWithArgs(self.__config)
  
 if __name__ == "__main__":
-  daemon = PlexPostProcessDaemon(Settings.GetConfig('Paths','daemonLinePidFile','daemon_plex_post_process.pid'))
+  daemon = PlexPostProcessDaemon(Settings.GetConfig('Paths','daemonLinePidFile','/tmp/daemon_plex_post_process.pid'))
   if len(sys.argv) > 1:
     if 'start' == sys.argv[1]:
       daemon.start()
