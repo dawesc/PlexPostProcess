@@ -30,7 +30,7 @@ class Commskip(object):
       
     command = [
         Settings.GetConfig('Applications', 'bash', '/usr/local/bin/bash'), 
-        os.path.join(Settings.GetRootPath(), '/plex_commskip.sh'),
+        os.path.join(Settings.GetRootPath(), 'plex_commskip.sh'),
         queuedFile.GetFilename()
         ]
 
