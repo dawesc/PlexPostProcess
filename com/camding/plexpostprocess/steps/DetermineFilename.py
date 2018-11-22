@@ -12,7 +12,15 @@ class DetermineFilename(object):
     self.__plexPostProcess = plexPostProcess
     self.__london = pytz.timezone('Europe/London') #This is where corrie is aired
     self.__ltz    = get_localzone()                #The servers timezone
+    self.__ltz    = pytz.timezone('US/Pacific')    #For some reason plex writes it in pacific time on freenas
     self.__tmpDir = Settings.GetConfig('Paths', 'backup', '/mnt/PlexRecordings/BackupMP2')
+    self.__plexLibraryPath = "/usr/local/plexdata-plexpass/Plex Media Server/Plug-in Support/Databases/com.plexapp.plugins.library.db"
+ 
+  def GetPlexLibraryPath(self):
+    return self.__plexLibraryPath
+  
+  def SetPlexLibraryPath(self, plexLibraryPath):
+    self.__plexLibraryPath = plexLibraryPath
   
   def GetPlexPostProcess(self):
     return self.__plexPostProcess;
@@ -36,7 +44,7 @@ class DetermineFilename(object):
 
   def GetCorrieIndex(self, locCreateDt):
     locale.setlocale(locale.LC_TIME, "en_GB.UTF-8")
-    conn = sqlite3.connect(Settings.GetConfig("Paths", "plexLibrary", "/usr/local/plexdata-plexpass/Plex Media Server/Plug-in Support/Databases/com.plexapp.plugins.library.db"))
+    conn = sqlite3.connect(Settings.GetConfig("Paths", "plexLibrary", self.GetPlexLibraryPath()))
     c = conn.cursor()
     formattedDate = locCreateDt.strftime("%A,%%" + ordinal(locCreateDt.day) + " %B %Y")
     sql = "select \"index\",title,guid from metadata_items where library_section_id=17 and guid like '%/71565/%' and metadata_type = 4 and title like '%" + formattedDate + "%';"
