@@ -32,6 +32,7 @@ from com.camding.plexpostprocess.FileScanner import FileScanner
 from com.camding.plexpostprocess.PlexPostProcessStateMachine import PlexPostProcessStateMachine
 from com.camding.plexpostprocess.Settings import Settings
 from com.camding.plexpostprocess.steps.DetermineFiletype import DetermineFiletype
+from com.camding.plexpostprocess.steps.DetermineFilename import DetermineFilename
 
 __all__ = []
 __version__ = 0.1
@@ -127,8 +128,8 @@ SOFTWARE.
       fileScanner = FileScanner(recurse = recurse, paths = paths, inpat = inpat, expat = expat, verbose = verbose)
       with DatabaseInteraction() as databaseInteraction:
         if args.debugCorrie:
-          x = PlexPostProcessStateMachine(databaseInteraction)
-          print(x.GetNewCoronationStreetFilename("Coronation Street (1960) - 2018-10-12 11 30 00 - Episode 10-12.mp4", None))
+          x = DetermineFilename(PlexPostProcessStateMachine(databaseInteraction))
+          print(x.GetNewCoronationStreetFilename("Coronation Street (1960) - 2018-11-30 20 30 00 - Episode 11-30.ts", None))
           return 0
         
         running = True

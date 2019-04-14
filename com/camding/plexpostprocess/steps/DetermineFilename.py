@@ -12,7 +12,7 @@ class DetermineFilename(object):
     self.__plexPostProcess = plexPostProcess
     self.__london = pytz.timezone('Europe/London') #This is where corrie is aired
     self.__ltz    = get_localzone()                #The servers timezone
-    self.__ltz    = pytz.timezone('US/Pacific')    #For some reason plex writes it in pacific time on freenas
+    self.__ltz    = pytz.timezone('Europe/London')    #For some reason plex writes it in pacific time on freenas
     self.__tmpDir = Settings.GetConfig('Paths', 'backup', '/mnt/PlexRecordings/BackupMP2')
     self.__plexLibraryPath = "/usr/local/plexdata-plexpass/Plex Media Server/Plug-in Support/Databases/com.plexapp.plugins.library.db"
  
