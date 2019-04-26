@@ -3,7 +3,7 @@
 '''
 com.camding.plexpostprocess.PlexPostProcess -- This is used to parse the arguments
 
-com.camding.plexpostprocess.PlexPostProcess is a application used to 
+com.camding.plexpostprocess.PlexPostProcess is a application used to
 make the system plexPostProcess all un-plexPostProcessd files
 
 It defines classes_and_methods
@@ -53,12 +53,12 @@ class PlexPostProcessShared():
     global DEBUG
     global TESTRUN
     global PROFILE
-    
+
     global __all__
     global __version__
     global __date__
     global __updated__
-    
+
     global wakeUp
 
     program_name = os.path.basename(sys.argv[0])
@@ -97,7 +97,7 @@ SOFTWARE.
       parser.add_argument("-r", "--recursive", dest="recurse", action="store_true", help="recurse into subfolders [default: %(default)s]", default=True)
       parser.add_argument("-v", "--verbose", dest="verbose", action="count", help="set verbosity level [default: %(default)s]", default=0)
       parser.add_argument("-i", "--include", dest="include", help="only include paths matching this regex pattern. Note: exclude is given preference over include. [default: %(default)s]", metavar="RE", default="*.ts" )
-      parser.add_argument("-e", "--exclude", dest="exclude", help="exclude paths matching this regex pattern. [default: %(default)s]", metavar="RE" )
+      parser.add_argument("-e", "--exclude", dest="exclude", help="exclude paths matching this regex pattern. [default: %(default)s]", metavar="RE", default="*.done.ts"  )
       parser.add_argument('-V', '--version', action='version', version=program_version_message)
       parser.add_argument('-D', '--daemon', dest='daemon', action="store_true", help="Run in daemon mode [default: %(default)s]", default=False)
       parser.add_argument('-C', '--debug-corrie', dest='debugCorrie', action="store_true", help="Debug coronation street [default: %(default)s]", default=False)
@@ -112,7 +112,7 @@ SOFTWARE.
       inpat   = args.include
       expat   = args.exclude
       daemon  = args.daemon
-      
+
       if daemon:
         signal.signal(signal.SIGUSR1, WakeUpNow)
 
@@ -131,7 +131,7 @@ SOFTWARE.
           x = DetermineFilename(PlexPostProcessStateMachine(databaseInteraction))
           print(x.GetNewCoronationStreetFilename("Coronation Street (1960) - 2018-11-30 20 30 00 - Episode 11-30.ts", None))
           return 0
-        
+
         running = True
         first = True
         updateDb = True
@@ -150,10 +150,10 @@ SOFTWARE.
           if nrNewFiles == 0:
             wakeUp.clear()
             if wakeUp.wait(3600): #sleep for one hour
-              time.sleep(5) #sleep for 5 seconds to prevent race condition on plex 
+              time.sleep(5) #sleep for 5 seconds to prevent race condition on plex
           running = daemon
           first = False
-      
+
       return 0
     except KeyboardInterrupt:
       ### handle keyboard interrupt ###

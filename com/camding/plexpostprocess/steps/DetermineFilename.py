@@ -94,7 +94,7 @@ class DetermineFilename(object):
     if Settings.GetConfig("Applications", "handbrake", "false").lower in ['true', '1', 't', 'y', 'yes', 'yeah', 'yup', 'certainly', 'uh-huh', 'on' ]:
       return baseFile + ".mp4"
     else:
-      return baseFile + "." + fileExtension
+      return baseFile + ".done." + fileExtension
 
   def GetDestFilename(self, queuedFile):
     baseFile = ntpath.basename(queuedFile.GetFilename())
