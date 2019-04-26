@@ -14,13 +14,13 @@ class PlexPostProcessStateMachine(object):
   def __init__(self, databaseInteraction):
     self.__databaseInteraction = databaseInteraction
     self.__queue = self.GetDatabaseInteraction().GetQueue();
-  
+
   def GetQueue(self):
     return self.__queue
-  
+
   def GetDatabaseInteraction(self):
     return self.__databaseInteraction;
-  
+
   def PlexPostProcess(self):
     queue = self.GetQueue()
     print('I have ' + str(len(queue)) + ' files to handle!')
@@ -28,7 +28,7 @@ class PlexPostProcessStateMachine(object):
       queuedFile = queue[i]
       while not queuedFile.IsFinished():
         self.ProcessQueuedFile(i, queuedFile)
-        
+
   def ProcessQueuedFile(self, i, queuedFile):
     print(' Processing ' + str(i) + queuedFile.GetFilename() + ' in state ' + queuedFile.GetState().name)
     if queuedFile.GetState() == PlexPostProcessState.INITIAL:
@@ -52,15 +52,15 @@ class PlexPostProcessStateMachine(object):
       self.DeleteDuplicateFile(i, queuedFile)
     else:
       raise Exception("Damn, invalid state " + queuedFile.GetState().name)
-    
+
   def RunProcess(self, command, env=None, stdin=None, stdout=None, stderr=None):
     """ Run command with specified env and I/O handles, return process """
-  
+
     # merge specified env with OS env
     myenv = os.environ.copy()
     if env is not None:
       myenv.update(env)
-  
+
     try:
       process = subprocess.Popen(command, stdin=stdin, stdout=stdout, stderr=stderr, env=myenv, bufsize=0)
       return process
@@ -80,9 +80,12 @@ class PlexPostProcessStateMachine(object):
       sys.exit(2)
       self.GetDatabaseInteraction().UpdateQFState(queuedFile, "Move Files", "Error " + str(sys.exc_info()[0]))
       return;
-    queuedFile.SetState(PlexPostProcessState.DELETING_ORIGINAL_FILE)
+    if Settings.GetConfig("Applications", "handbrake", "false").lower in ['true', '1', 't', 'y', 'yes', 'yeah', 'yup', 'certainly', 'uh-huh', 'on' ]:
+      queuedFile.SetState(PlexPostProcessState.DELETING_ORIGINAL_FILE)
+    else:
+      queuedFile.SetState(PlexPostProcessState.SUCCESS)
     self.GetDatabaseInteraction().UpdateQFState(queuedFile, "Move Files", "Finished moving files with success!")
-    
+
   def DeleteFile(self, deleteType, successState, errorState, _i, queuedFile):
     self.GetDatabaseInteraction().AddQFHistory(queuedFile, deleteType, "Deleting '" + queuedFile.GetFilename() + "'")
     try:
@@ -93,10 +96,9 @@ class PlexPostProcessStateMachine(object):
       return;
     queuedFile.SetState(successState)
     self.GetDatabaseInteraction().UpdateQFState(queuedFile, deleteType, "Finished deleting files with success!")
-    
+
   def DeleteOriginalFile(self, i, queuedFile):
     self.DeleteFile("Delete Original", PlexPostProcessState.SUCCESS, PlexPostProcessState.ERROR, i, queuedFile)
-    
+
   def DeleteDuplicateFile(self, i, queuedFile):
     self.DeleteFile("Delete Duplicate", PlexPostProcessState.DUPLICATE_DELETED, PlexPostProcessState.ERROR, i, queuedFile)
-    
