@@ -107,6 +107,8 @@ class DetermineFilename(object):
 
   def GetTempFilename(self, queuedFile):
     if queuedFile.GetFiletype() == 'm4v':
+      if Settings.GetConfig("Applications", "handbrake", "false").lower not in ['true', '1', 't', 'y', 'yes', 'yeah', 'yup', 'certainly', 'uh-huh', 'on' ]:
+        return queuedFile.GetFilename()
       return os.path.join(self.__tmpDir, ntpath.basename(queuedFile.GetFilename()) + "." + str(queuedFile.GetId()) + ".mp4")
     else:
       return os.path.join(self.__tmpDir, ntpath.basename(queuedFile.GetFilename()) + "." + str(queuedFile.GetId()) + ".mp3")
