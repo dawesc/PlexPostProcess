@@ -52,12 +52,12 @@ class Transcode(object):
         filenameHandler.GetTempFilename(queuedFile)]
 
     if command is not None:
-      self.RunCommand(command)
+      self.RunCommand(queuedFile, command)
     else:
       queuedFile.SetState(PlexPostProcessState.MOVING_FILES)
       self.GetPlexPostProcess().GetDatabaseInteraction().UpdateQFState(queuedFile, "Transcode", "Transcode skipped")
 
-  def RunCommand(self, command):
+  def RunCommand(self, queuedFile, command):
     logfile_queue = Queue()
     logfile_queue.put(" ".join(command).encode('utf-8'))
     sys.stdout.write(" ".join(command))
