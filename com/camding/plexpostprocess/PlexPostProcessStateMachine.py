@@ -33,7 +33,10 @@ class PlexPostProcessStateMachine(object):
     print(' Processing ' + str(i) + queuedFile.GetFilename() + ' in state ' + queuedFile.GetState().name)
     if queuedFile.GetState() == PlexPostProcessState.INITIAL:
       if queuedFile.GetFiletype() == 'm4v':
-        queuedFile.SetState(PlexPostProcessState.TRANSCODING) # Comskip no longer needed
+        if Settings.GetConfig("Applications", "handbrake", "false").lower in ['true', '1', 't', 'y', 'yes', 'yeah', 'yup', 'certainly', 'uh-huh', 'on' ]:
+          queuedFile.SetState(PlexPostProcessState.COMMSKIP)
+        else:
+          queuedFile.SetState(PlexPostProcessState.TRANSCODING) # Comskip no longer needed
         self.GetDatabaseInteraction().UpdateQFState(queuedFile, "Startup", "Started commskip")
       else:
         queuedFile.SetState(PlexPostProcessState.TRANSCODING)
