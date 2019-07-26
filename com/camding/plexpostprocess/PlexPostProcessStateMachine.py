@@ -75,8 +75,10 @@ class PlexPostProcessStateMachine(object):
     self.GetDatabaseInteraction().AddQFHistory(queuedFile, "Move Files", "Moving from '" + filenameHandler.GetTempFilename(queuedFile) + "' to '" + filenameHandler.GetDestFilename(queuedFile) + "'")
     try:
       shutil.move(filenameHandler.GetTempFilename(queuedFile), filenameHandler.GetDestFilename(queuedFile))
-    except:
+    except Exception as e:
       queuedFile.SetState(PlexPostProcessState.ERROR)
+      print(e.__doc__)
+      print(e.message)
       sys.exit(2)
       self.GetDatabaseInteraction().UpdateQFState(queuedFile, "Move Files", "Error " + str(sys.exc_info()[0]))
       return;
